@@ -1,0 +1,23 @@
+version: '3.9'
+
+# Development override — hot-reload for both front and back
+services:
+  backend:
+    command: ["node", "node_modules/.bin/nodemon", "src/server.js"]
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: development
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_URL: http://localhost:5000/api
