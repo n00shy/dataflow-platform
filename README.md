@@ -30,30 +30,32 @@ A production-ready web application for managing and entering data, built with mo
 dataflow/
 ├── backend/
 │   ├── src/
-│   │   ├── controllers/     # Business logic
-│   │   ├── middleware/      # Auth & error handling
-│   │   ├── models/          # Mongoose schemas
-│   │   ├── routes/          # API routes
-│   │   ├── utils/           # JWT helpers
-│   │   └── server.js        # Entry point
-│   ├── .env                 # Environment variables
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── utils/
+│   │   └── server.js
+│   ├── .env
+│   ├── package.json
+│   ├── package-lock.json      
 │   ├── Dockerfile
-│   └── package.json
+│
 ├── frontend/
 │   ├── src/
-│   │   ├── api/             # Axios API service
-│   │   ├── components/      # Reusable components
-│   │   ├── context/         # Auth & Theme context
-│   │   ├── pages/           # Route pages
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── pages/
 │   │   └── main.jsx
+│   ├── package.json
+│   ├── package-lock.json   
 │   ├── Dockerfile
 │   ├── nginx.conf
-│   └── package.json
-├── docker-compose.yml       # Production
-├── docker-compose.dev.yml   # Development override
+│
+├── docker-compose.yml
+├── docker-compose.dev.yml
 └── README.md
-```
-
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -65,12 +67,6 @@ dataflow/
 ```bash
 git clone <repo-url>
 cd dataflow
-```
-
-Edit `backend/.env` — change secrets for production:
-```env
-JWT_SECRET=your_super_secret_key
-JWT_REFRESH_SECRET=your_refresh_secret
 ```
 
 ### 2. Run with Docker (Production)
