@@ -26,162 +26,88 @@ A production-ready web application for managing and entering data, built with mo
 
 ## 📁 Project Structure
 
-```
+
 dataflow/
 ├── backend/
-│   ├── src/
-│   │   ├── controllers/
-│   │   ├── middleware/
-│   │   ├── models/
-│   │   ├── routes/
-│   │   ├── utils/
-│   │   └── server.js
-│   ├── .env
-│   ├── package.json
-│   ├── package-lock.json      
-│   ├── Dockerfile
+│ ├── src/
+│ ├── package.json
+│ ├── package-lock.json
+│ ├── Dockerfile
 │
 ├── frontend/
-│   ├── src/
-│   │   ├── api/
-│   │   ├── components/
-│   │   ├── context/
-│   │   ├── pages/
-│   │   └── main.jsx
-│   ├── package.json
-│   ├── package-lock.json   
-│   ├── Dockerfile
-│   ├── nginx.conf
+│ ├── src/
+│ ├── package.json
+│ ├── package-lock.json
+│ ├── Dockerfile
+│ ├── nginx.conf
 │
 ├── docker-compose.yml
 ├── docker-compose.dev.yml
 └── README.md
+
+
+---
+
+## 🚀 CI/CD Pipeline (GitHub Actions + Docker Hub)
+
+This project uses automated CI/CD with GitHub Actions.
+
+### ⚙️ Pipeline Flow
+On every push to `main`:
+
+- Install dependencies (frontend + backend)
+- Build project
+- Build Docker images
+- Push images to Docker Hub
+
+### 🔐 Required Secrets
+
+Add in GitHub:
+
+- `DOCKER_USERNAME`
+- `DOCKER_PASSWORD`
+
+### 🐳 Docker Images
+
+After pipeline success:
+
+- `your-dockerhub/workflow-backend:latest`
+- `your-dockerhub/workflow-frontend:latest`
+
+### 📦 Workflow File
+
+
+.github/workflows/cicd.yml
+
+
+---
+
 ## 🚀 Quick Start
 
-### Prerequisites
-- Docker & Docker Compose installed
-- Git
-
-### 1. Clone & Configure
-
+### 1. Clone project
 ```bash
 git clone <repo-url>
 cd dataflow
-```
-
-### 2. Run with Docker (Production)
-
-```bash
+2. Run with Docker
 docker-compose up -d --build
-```
 
-App available at:
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000/api
-- Health check: http://localhost:5000/api/health
+Frontend:
+http://localhost:3000
 
-### 3. Run for Development (Hot Reload)
+Backend:
+http://localhost:5000/api
 
-```bash
-# Install dependencies locally
-cd backend && npm install && cd ..
-cd frontend && npm install && cd ..
-
-# Backend
-cd backend && npm run dev
-
-# Frontend (new terminal)
-cd frontend && npm run dev
-```
-
-Or with Docker dev mode:
-```bash
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
-```
-
-### 4. First Login
-
-The **first registered user automatically becomes Admin**.
-
-Register at http://localhost:3000/register with:
-- Any name
-- Any email
-- Password (min 6 chars)
-
-## 🔗 API Endpoints
-
-### Auth
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| POST | `/api/auth/register` | Register new user | Public |
-| POST | `/api/auth/login` | Login | Public |
-| POST | `/api/auth/refresh` | Refresh access token | Public |
-| POST | `/api/auth/logout` | Logout | Required |
-| GET | `/api/auth/me` | Get current user | Required |
-
-### Records
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| GET | `/api/records` | List records (paginated) | Required |
-| GET | `/api/records/export` | Export all records | Required |
-| POST | `/api/records` | Create record | Required |
-| PUT | `/api/records/:id` | Update record | Required |
-| DELETE | `/api/records/:id` | Delete record | Required |
-
-**Query params for GET /api/records:**
-- `page`, `limit` — pagination
-- `search` — full-text search
-- `status` — filter by active/inactive/pending
-- `startDate`, `endDate` — date range
-- `sortBy`, `sortOrder` — sorting
-
-### Users (Admin only)
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/users` | List all users |
-| PATCH | `/api/users/:id/toggle-status` | Activate/deactivate |
-| PATCH | `/api/users/:id/role` | Change role |
-
-### Activity
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/activity` | Get activity log |
-
-## 🔐 Security Features
-
-- Passwords hashed with bcrypt (12 rounds)
-- Short-lived JWT access tokens (15 min)
-- Refresh token rotation (7 days)
-- Rate limiting (100 req/15 min)
-- CORS configured
-- Role-based route protection
-- Users can only access their own records (admins see all)
-
-## 🧹 Useful Commands
-
-```bash
-# View logs
-docker-compose logs -f backend
-docker-compose logs -f frontend
-
-# Stop everything
+🔐 API Overview
+Auth
+POST /api/auth/register
+POST /api/auth/login
+POST /api/auth/refresh
+Records
+GET /api/records
+POST /api/records
+PUT /api/records/:id
+DELETE /api/records/:id
+🧹 Useful Commands
+docker-compose up -d --build
+docker-compose logs -f
 docker-compose down
-
-# Remove volumes (clears database)
-docker-compose down -v
-
-# Rebuild single service
-docker-compose up -d --build backend
-```
-
-## 🌙 Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `PORT` | Backend port | `5000` |
-| `MONGODB_URI` | MongoDB connection string | - |
-| `JWT_SECRET` | Access token secret | - |
-| `JWT_EXPIRES_IN` | Access token lifetime | `15m` |
-| `JWT_REFRESH_SECRET` | Refresh token secret | - |
-| `JWT_REFRESH_EXPIRES_IN` | Refresh token lifetime | `7d` |
-| `FRONTEND_URL` | CORS allowed origin | `http://localhost:3000` |
